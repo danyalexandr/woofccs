@@ -1,8 +1,11 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
+import Image from 'next/image'
+
+
+const NAV_LINKS = ['Productos', 'Contacto']
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false)
@@ -14,93 +17,98 @@ export default function Header() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? 'hidden' : ''
+    return () => { document.body.style.overflow = '' }
+  }, [menuOpen])
+
   return (
-    <header
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 100,
-        padding: '0 2rem',
-        height: scrolled ? '64px' : '80px',
-        background: scrolled ? 'rgba(13,13,13,0.95)' : 'transparent',
+    <>
+      <style>{`
+        .woof-nav { display: flex !important; }
+        .woof-burger { display: none !important; }
+        .woof-drawer { display: none !important; }
+        @media (max-width: 768px) {
+          .woof-nav { display: none !important; }
+          .woof-burger { display: flex !important; }
+          .woof-drawer { display: flex !important; }
+        }
+      `}</style>
+
+      <header style={{
+        position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
+        padding: '0 1.5rem',
+        height: scrolled ? '60px' : '72px',
+        background: scrolled || menuOpen ? 'rgba(13,13,13,0.98)' : 'transparent',
         backdropFilter: scrolled ? 'blur(12px)' : 'none',
         borderBottom: scrolled ? '1px solid rgba(77,255,210,0.1)' : 'none',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        transition: 'all 0.3s ease',
-      }}
-    >
-      {/* Logo */}
-      <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}>
-        <div style={{
-          width: 48, height: 48,
-          borderRadius: '50%',
-          background: '#4DFFD2',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          flexShrink: 0,
-        }}>
-          <Image 
-              src="/woofccs_logo.png" 
-              alt="EWoofCCS" 
-              width={48} 
-              height={48}
-              className="w-10 h-10 md:w-12 md:h-12"
-            />
-        </div>
-        <span style={{
-          fontFamily: 'Bebas Neue, sans-serif',
-          fontSize: '26px',
-          letterSpacing: '4px',
-          color: '#f5f5f0',
-        }}>
-          WOOF<span style={{ color: '#4DFFD2' }}>CCS</span>
-        </span>
-      </Link>
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        transition: 'height 0.3s, background 0.3s',
+      }}>
+        
+        <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none', zIndex: 101 }}>
+          {/* <div style={{ width: 38, height: 38, borderRadius: '50%', background: '#4DFFD2', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <span style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: '20px', color: '#0d0d0d' }}>W</span>
+          </div> */}
+          <Image src="/woofccs_logo.png" alt="EWoofCCS" width={48} height={48} className="w-10 h-10 md:w-12 md:h-12"/>
+          <span style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: '22px', letterSpacing: '4px', color: '#f5f5f0' }}>
+            WOOF<span style={{ color: '#4DFFD2' }}>CCS</span>
+          </span>
+        </Link>
 
-      {/* Desktop Nav */}
-      <nav style={{ display: 'flex', gap: '2.5rem', alignItems: 'center' }}>
-        {['Productos', 'Contacto'].map((item) => (
-          <a
-            key={item}
-            href={`#${item.toLowerCase()}`}
+        {/* Desktop Nav */}
+        <nav className="woof-nav" style={{ gap: '2.5rem', alignItems: 'center' }}>
+          {NAV_LINKS.map(item => (
+            <a key={item} href={`#${item.toLowerCase()}`}
+              style={{ color: '#888', textDecoration: 'none', fontSize: '13px', fontWeight: 500, letterSpacing: '1.5px', textTransform: 'uppercase', transition: 'color 0.2s' }}
+              onMouseEnter={e => (e.currentTarget.style.color = '#4DFFD2')}
+              onMouseLeave={e => (e.currentTarget.style.color = '#888')}
+            >{item}</a>
+          ))}
+          <a href="#contacto" style={{
+            background: '#4DFFD2', color: '#0d0d0d', padding: '10px 22px', borderRadius: '4px',
+            fontWeight: 700, fontSize: '13px', letterSpacing: '1px', textDecoration: 'none', textTransform: 'uppercase',
+          }}>Pedir ahora</a>
+        </nav>
+
+        {/* Hamburger */}
+        <button className="woof-burger" onClick={() => setMenuOpen(o => !o)}
+          style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '5px', width: 40, height: 40, background: 'none', border: 'none', cursor: 'pointer', zIndex: 101, padding: 0 }}
+        >
+          <span style={{ display: 'block', width: 22, height: 2, background: '#f5f5f0', borderRadius: 2, transition: 'all 0.3s', transform: menuOpen ? 'translateY(7px) rotate(45deg)' : 'none' }} />
+          <span style={{ display: 'block', width: 22, height: 2, background: '#f5f5f0', borderRadius: 2, transition: 'all 0.3s', opacity: menuOpen ? 0 : 1 }} />
+          <span style={{ display: 'block', width: 22, height: 2, background: '#f5f5f0', borderRadius: 2, transition: 'all 0.3s', transform: menuOpen ? 'translateY(-7px) rotate(-45deg)' : 'none' }} />
+        </button>
+      </header>
+
+      {/* Mobile Drawer */}
+      <div className="woof-drawer" style={{
+        position: 'fixed', inset: 0, zIndex: 99, background: '#0d0d0d',
+        flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '0.25rem',
+        transform: menuOpen ? 'translateX(0)' : 'translateX(100%)',
+        transition: 'transform 0.35s cubic-bezier(0.4,0,0.2,1)',
+      }}>
+        {NAV_LINKS.map((item, i) => (
+          <a key={item} href={`#${item.toLowerCase()}`} onClick={() => setMenuOpen(false)}
             style={{
-              color: '#888',
-              textDecoration: 'none',
-              fontSize: '13px',
-              fontWeight: 500,
-              letterSpacing: '1.5px',
-              textTransform: 'uppercase',
-              transition: 'color 0.2s',
+              fontFamily: 'Bebas Neue, sans-serif', fontSize: '48px', letterSpacing: '4px',
+              color: '#f5f5f0', textDecoration: 'none',
+              opacity: menuOpen ? 1 : 0,
+              transform: menuOpen ? 'translateY(0)' : 'translateY(16px)',
+              transition: `color 0.2s, opacity 0.3s ${i * 60}ms, transform 0.3s ${i * 60}ms`,
             }}
             onMouseEnter={e => (e.currentTarget.style.color = '#4DFFD2')}
-            onMouseLeave={e => (e.currentTarget.style.color = '#888')}
-          >
-            {item}
-          </a>
+            onMouseLeave={e => (e.currentTarget.style.color = '#f5f5f0')}
+          >{item}</a>
         ))}
-        <a
-          href="#contacto"
-          style={{
-            background: '#4DFFD2',
-            color: '#0d0d0d',
-            padding: '10px 22px',
-            borderRadius: '4px',
-            fontWeight: 700,
-            fontSize: '13px',
-            letterSpacing: '1px',
-            textDecoration: 'none',
-            textTransform: 'uppercase',
-            transition: 'all 0.2s',
-          }}
-          onMouseEnter={e => { e.currentTarget.style.background = '#fff'; }}
-          onMouseLeave={e => { e.currentTarget.style.background = '#4DFFD2'; }}
-        >
-          Pedir ahora
-        </a>
-      </nav>
-    </header>
+        <a href="#contacto" onClick={() => setMenuOpen(false)} style={{
+          marginTop: '2rem', background: '#4DFFD2', color: '#0d0d0d',
+          padding: '16px 40px', borderRadius: '4px',
+          fontFamily: 'Bebas Neue, sans-serif', fontSize: '20px', letterSpacing: '3px', textDecoration: 'none',
+          opacity: menuOpen ? 1 : 0,
+          transition: 'opacity 0.3s 0.28s',
+        }}>Pedir Ahora</a>
+      </div>
+    </>
   )
 }

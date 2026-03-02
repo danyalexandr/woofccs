@@ -63,7 +63,23 @@ console.log(supabaseKey)
   }
 
   return (
-    <section id="contacto" style={{
+    <>
+      <style>{`
+  .order-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  @media (max-width: 640px) {
+    .order-grid {
+      grid-template-columns: 1fr !important;
+    }
+    .order-box {
+      padding: 1.25rem !important;
+    }
+  }
+`}</style>
+      <section id="contacto" style={{
       padding: '6rem 2rem',
       background: '#0a0a0a',
       borderTop: '1px solid rgba(255,255,255,0.04)',
@@ -132,13 +148,8 @@ console.log(supabaseKey)
             </button>
           </div>
         ) : (
-          <div style={{
-            background: '#111',
-            border: '1px solid rgba(255,255,255,0.06)',
-            borderRadius: '16px',
-            padding: '2.5rem',
-          }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+          <div className="order-box" style={{ background: '#111', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '2.5rem' }}>
+            <div className="order-grid">
               <Field label="Nombre completo *" value={form.name} onChange={update('name')} placeholder="Tu nombre" />
               <Field label="Teléfono / WhatsApp *" value={form.phone} onChange={update('phone')} placeholder="+58 412 000 0000" type="tel" />
               <Field label="Email" value={form.email} onChange={update('email')} placeholder="tu@email.com" type="email" />
@@ -212,6 +223,7 @@ console.log(supabaseKey)
         )}
       </div>
     </section>
+    </>
   )
 }
 
