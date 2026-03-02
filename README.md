@@ -1,36 +1,89 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# WoofCCS — Pet Food Store
 
-## Getting Started
+Tienda de comida para mascotas. Stack: **Next.js 14 + Supabase + Vercel**.
 
-First, run the development server:
+## Setup Rápido
+
+### 1. Crear proyecto Next.js
+
+```bash
+npx create-next-app@latest woofccs --typescript --tailwind --app
+cd woofccs
+npm install @supabase/supabase-js
+```
+
+### 2. Copiar los archivos
+
+Copia los archivos de este proyecto en tu carpeta:
+- `app/` → reemplaza el contenido de `app/`
+- `components/` → crea esta carpeta en la raíz
+- `lib/` → crea esta carpeta en la raíz
+
+### 3. Configurar Supabase
+
+1. Crea un proyecto en [supabase.com](https://supabase.com)
+2. Ve a **SQL Editor** y ejecuta el contenido de `supabase/schema.sql`
+3. Copia `.env.local.example` → `.env.local` y llena tus keys
+
+```bash
+cp .env.local.example .env.local
+```
+
+Llena las variables con los valores de **Supabase → Settings → API**:
+```
+NEXT_PUBLIC_SUPABASE_URL=https://lzhtrvakazmfqljdaqys.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6aHRydmFrYXptZnFsamRhcXlzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIzMjc5NTAsImV4cCI6MjA4NzkwMzk1MH0.n2FnVTvl44kzNVLsyuGB6VR91dVIFR4BFd0PHDTz28I
+```
+
+### 4. Correr en local
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 5. Deploy en Vercel
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm install -g vercel
+vercel
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Agrega las variables de entorno en **Vercel → Settings → Environment Variables**.
 
-## Learn More
+## Personalización
 
-To learn more about Next.js, take a look at the following resources:
+### Cambiar productos
+Edita `lib/products.ts` — cada producto tiene: nombre, precio, descripción, beneficios, emoji e ingredientes.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Cambiar colores / fuentes
+Edita `app/globals.css` — todo usa variables CSS bajo `:root`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Agregar imágenes reales
+Reemplaza los emojis en `ProductCard` y `ProductModal` con componentes `<Image>` de Next.js apuntando a tus imágenes en `/public` o Supabase Storage.
 
-## Deploy on Vercel
+### Ver pedidos
+Los pedidos se guardan en la tabla `orders` de Supabase. Puedes verlos en:
+- **Supabase → Table Editor → orders**
+- O construir un panel admin con autenticación Supabase Auth
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Estructura del Proyecto
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+woofccs/
+├── app/
+│   ├── layout.tsx        # Root layout + metadata
+│   ├── page.tsx          # Home page
+│   └── globals.css       # Brand styles + CSS variables
+├── components/
+│   ├── Header.tsx        # Navbar sticky + scroll effect
+│   ├── Hero.tsx          # Hero section
+│   ├── ProductGrid.tsx   # Catálogo con filtros
+│   ├── ProductModal.tsx  # Modal detalle + contador cantidad
+│   ├── OrderForm.tsx     # Formulario → Supabase
+│   └── Footer.tsx        # Footer completo
+├── lib/
+│   └── products.ts       # Tipos y datos de productos
+└── supabase/
+    └── schema.sql        # SQL para crear tabla orders
+```
+# woofccs
