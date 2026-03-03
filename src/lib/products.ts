@@ -40,7 +40,7 @@ export const PRODUCTS: Product[] = [
     benefits: ['Masa muscular', 'Energía sostenida', 'Pelaje brillante'],
     emoji: '🦴',
     color: '#4DFFD2',
-    in_stock: true,
+    in_stock: false,
   },
   {
     id: '3',
@@ -54,7 +54,7 @@ export const PRODUCTS: Product[] = [
     benefits: ['Articulaciones', 'Control de peso', 'Digestión fácil'],
     emoji: '❤️',
     color: '#9B59B6',
-    in_stock: true,
+    in_stock: false,
   },
   {
     id: '4',
@@ -68,7 +68,7 @@ export const PRODUCTS: Product[] = [
     benefits: ['Sin granos', 'Alta proteína', 'Apto sensibles'],
     emoji: '🐟',
     color: '#3498DB',
-    in_stock: true,
+    in_stock: false,
   },
   {
     id: '5',
@@ -82,7 +82,7 @@ export const PRODUCTS: Product[] = [
     benefits: ['Alta hidratación', 'Palatabilidad máxima', 'Sin conservantes'],
     emoji: '🥩',
     color: '#E74C3C',
-    in_stock: true,
+    in_stock: false,
   },
   {
     id: '6',

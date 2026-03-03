@@ -70,14 +70,14 @@ export default function ProductModal({ product, onClose }: Props) {
         <div className="modal-image-pane" style={{
           background: `linear-gradient(135deg, ${product.color}20 0%, ${product.color}05 100%)`,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontSize: '120px', padding: '3rem', position: 'relative', minHeight: '260px',
+          fontSize: '100px', padding: '3rem', position: 'relative', minHeight: '260px',
         }}>
           <span style={{ filter: 'drop-shadow(0 16px 40px rgba(0,0,0,0.5))' }}>{product.emoji}</span>
           <div style={{
             position: 'absolute', bottom: 16, left: 16,
             background: `${product.color}20`, border: `1px solid ${product.color}50`,
             padding: '6px 14px', borderRadius: '6px',
-            fontSize: '12px', color: product.color, letterSpacing: '1px', textTransform: 'uppercase', fontWeight: 700,
+            fontSize: '10px', color: product.color, letterSpacing: '1px', textTransform: 'uppercase', fontWeight: 700,
           }}>{product.brand}</div>
         </div>
 
@@ -86,13 +86,13 @@ export default function ProductModal({ product, onClose }: Props) {
           <button onClick={onClose} style={{
             alignSelf: 'flex-end', background: 'rgba(255,255,255,0.05)',
             border: '1px solid rgba(255,255,255,0.08)', color: '#888',
-            width: 32, height: 32, borderRadius: '50%', cursor: 'pointer', fontSize: '16px', marginBottom: '0.75rem',
+            width: 30, height: 30, borderRadius: '50%', cursor: 'pointer', fontSize: '16px', marginBottom: '0.75rem',
           }}>✕</button>
 
           <div style={{ fontSize: '11px', color: '#555', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '4px' }}>
             {product.category} · {product.weight_kg}kg
           </div>
-          <h2 style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: '32px', letterSpacing: '1px', color: '#f5f5f0', marginBottom: '0.75rem' }}>
+          <h2 style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: '30px', letterSpacing: '1px', color: '#f5f5f0', marginBottom: '0.75rem' }}>
             {product.name}
           </h2>
           <p style={{ fontSize: '13px', color: '#777', lineHeight: 1.7, marginBottom: '1rem' }}>{product.description}</p>
@@ -118,7 +118,7 @@ export default function ProductModal({ product, onClose }: Props) {
 
           {/* Price */}
           <div style={{ marginBottom: '1rem' }}>
-            <span style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: '38px', color: '#4DFFD2' }}>
+            <span style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: '36px', color: '#4DFFD2' }}>
               ${(product.price_usd * qty).toFixed(2)}
             </span>
             <span style={{ fontSize: '12px', color: '#555', marginLeft: '4px' }}>USD</span>
