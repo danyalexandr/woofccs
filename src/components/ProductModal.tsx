@@ -98,14 +98,14 @@ export default function ProductModal({ product, onClose }: Props) {
           <p style={{ fontSize: '13px', color: '#777', lineHeight: 1.7, marginBottom: '1rem' }}>{product.description}</p>
 
           {/* Benefits */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '1rem' }}>
+          {/* <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '1rem' }}>
             {product.benefits.map(b => (
               <span key={b} style={{
                 background: 'rgba(77,255,210,0.07)', border: '1px solid rgba(77,255,210,0.2)',
                 color: '#4DFFD2', padding: '3px 10px', borderRadius: '100px', fontSize: '11px', fontWeight: 500,
               }}>✓ {b}</span>
             ))}
-          </div>
+          </div> */}
 
           {/* Ingredients */}
           <div style={{
@@ -118,7 +118,7 @@ export default function ProductModal({ product, onClose }: Props) {
 
           {/* Price */}
           <div style={{ marginBottom: '1rem' }}>
-            <span style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: '36px', color: '#4DFFD2' }}>
+            <span style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: '30px', color: '#4DFFD2' }}>
               ${(product.price_usd * qty).toFixed(2)}
             </span>
             <span style={{ fontSize: '12px', color: '#555', marginLeft: '4px' }}>USD</span>
@@ -146,7 +146,7 @@ export default function ProductModal({ product, onClose }: Props) {
             background: added ? '#1e1e1e' : (product.in_stock ? '#4DFFD2' : '#2a2a2a'),
             color: added ? '#4DFFD2' : (product.in_stock ? '#0d0d0d' : '#555'),
             border: added ? '1px solid #4DFFD2' : 'none',
-            borderRadius: '8px', fontFamily: 'Bebas Neue, sans-serif', fontSize: '16px', letterSpacing: '2px',
+            borderRadius: '8px', fontFamily: 'Bebas Neue, sans-serif', fontSize: '12px', letterSpacing: '2px',
             cursor: product.in_stock ? 'pointer' : 'not-allowed', transition: 'all 0.3s',
           }}>
             {!product.in_stock ? 'AGOTADO' : added ? '✓ IR AL PEDIDO' : `AGREGAR · $${(product.price_usd * qty).toFixed(2)}`}
