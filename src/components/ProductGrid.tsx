@@ -4,9 +4,12 @@ import { useState } from 'react'
 import { PRODUCTS, Product } from '@/lib/products'
 import ProductModal from './ProductModal'
 
-const CATEGORIES = ['Todos', 'Cachorros', 'Adultos', 'Seniors', 'Sin Cereales', 'Húmedo', 'Premios']
+const CATEGORIES = ['Todos', 'Res', 'Pollo', 'Cordero', 'Mix', 'Húmedo', 'Premios']
 
-export default function ProductGrid() {
+  export default function ProductGrid({ onAddToOrder }: {
+  onAddToOrder: (item: { product: Product; qty: number }) => void
+}) {
+
   const [active, setActive] = useState('Todos')
   const [selected, setSelected] = useState<Product | null>(null)
 
@@ -14,6 +17,7 @@ export default function ProductGrid() {
 
   return (
     <section id="productos" style={{ padding: '6rem 2rem', maxWidth: '1200px', margin: '0 auto' }}>
+
       {/* Section Header */}
       <div style={{ marginBottom: '3rem' }}>
         <span style={{
@@ -72,8 +76,15 @@ export default function ProductGrid() {
         ))}
       </div>
 
-      {selected && (
-        <ProductModal product={selected} onClose={() => setSelected(null)} />
+        {selected && (
+        <ProductModal
+          product={selected}
+          onClose={() => setSelected(null)}
+          onAddToOrder={(item) => {
+            onAddToOrder(item)
+            setSelected(null)
+          }}
+        />
       )}
     </section>
   )

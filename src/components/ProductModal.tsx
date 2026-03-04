@@ -6,11 +6,21 @@ import { Product } from '@/lib/products'
 interface Props {
   product: Product
   onClose: () => void
+  onAddToOrder: (item: { product: Product; qty: number }) => void  // ← nuevo
 }
 
-export default function ProductModal({ product, onClose }: Props) {
+export default function ProductModal({ product, onClose, onAddToOrder }: Props) {
   const [qty, setQty] = useState(1)
   const [added, setAdded] = useState(false)
+  
+  const handleAdd = () => {
+    // Emite el item al padre
+    onAddToOrder({ product, qty })
+    setAdded(true)
+     // Scroll al formulario
+    setTimeout(() => {
+      document.getElementById('contacto')?.scrollIntoView({ behavior: 'smooth' })
+    }, 100)}
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose()
@@ -18,14 +28,6 @@ export default function ProductModal({ product, onClose }: Props) {
     document.body.style.overflow = 'hidden'
     return () => { window.removeEventListener('keydown', onKey); document.body.style.overflow = '' }
   }, [onClose])
-
-  const handleAdd = () => {
-    setAdded(true)
-    setTimeout(() => {
-      document.getElementById('contacto')?.scrollIntoView({ behavior: 'smooth' })
-      onClose()
-    }, 600)
-  }
 
   return (
     <div onClick={onClose} style={{
