@@ -2,14 +2,14 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
-
+import { useCart } from '@/lib/CartContext'
 
 const NAV_LINKS = ['Productos', 'Contacto']
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const { count, openCart } = useCart()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40)
@@ -33,6 +33,7 @@ export default function Header() {
           .woof-burger { display: flex !important; }
           .woof-drawer { display: flex !important; }
         }
+        @keyframes cartBounce { 0%,100%{transform:scale(1)} 40%{transform:scale(1.3)} 70%{transform:scale(0.9)} }
       `}</style>
 
       <header style={{
@@ -45,19 +46,19 @@ export default function Header() {
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         transition: 'height 0.3s, background 0.3s',
       }}>
-        
+
+        {/* Logo */}
         <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none', zIndex: 101 }}>
-          {/* <div style={{ width: 38, height: 38, borderRadius: '50%', background: '#4DFFD2', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ width: 38, height: 38, borderRadius: '50%', background: '#4DFFD2', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <span style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: '20px', color: '#0d0d0d' }}>W</span>
-          </div> */}
-          <Image src="/woofccs_logo.png" alt="EWoofCCS" width={48} height={48} className="w-10 h-10 md:w-12 md:h-12"/>
+          </div>
           <span style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: '22px', letterSpacing: '4px', color: '#f5f5f0' }}>
             WOOF<span style={{ color: '#4DFFD2' }}>CCS</span>
           </span>
         </Link>
 
         {/* Desktop Nav */}
-        <nav className="woof-nav" style={{ gap: '2.5rem', alignItems: 'center' }}>
+        <nav className="woof-nav" style={{ gap: '2rem', alignItems: 'center' }}>
           {NAV_LINKS.map(item => (
             <a key={item} href={`#${item.toLowerCase()}`}
               style={{ color: '#888', textDecoration: 'none', fontSize: '13px', fontWeight: 500, letterSpacing: '1.5px', textTransform: 'uppercase', transition: 'color 0.2s' }}
@@ -65,20 +66,61 @@ export default function Header() {
               onMouseLeave={e => (e.currentTarget.style.color = '#888')}
             >{item}</a>
           ))}
-          <a href="#contacto" style={{
-            background: '#4DFFD2', color: '#0d0d0d', padding: '10px 22px', borderRadius: '4px',
-            fontWeight: 700, fontSize: '13px', letterSpacing: '1px', textDecoration: 'none', textTransform: 'uppercase',
-          }}>Pedir ahora</a>
+
+          {/* Cart button */}
+          <button onClick={openCart} style={{
+            position: 'relative',
+            background: count > 0 ? 'rgba(77,255,210,0.1)' : 'rgba(255,255,255,0.05)',
+            border: `1px solid ${count > 0 ? 'rgba(77,255,210,0.3)' : 'rgba(255,255,255,0.1)'}`,
+            borderRadius: '8px', padding: '8px 16px',
+            color: count > 0 ? '#4DFFD2' : '#888',
+            cursor: 'pointer', fontSize: '13px', fontFamily: 'DM Sans, sans-serif',
+            display: 'flex', alignItems: 'center', gap: '8px',
+            transition: 'all 0.2s',
+          }}>
+            🛒
+            {count > 0 && (
+              <span style={{
+                fontFamily: 'Bebas Neue, sans-serif', fontSize: '16px',
+                animation: 'cartBounce 0.4s ease',
+              }}>
+                {count}
+              </span>
+            )}
+          </button>
         </nav>
 
-        {/* Hamburger */}
-        <button className="woof-burger" onClick={() => setMenuOpen(o => !o)}
-          style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '5px', width: 40, height: 40, background: 'none', border: 'none', cursor: 'pointer', zIndex: 101, padding: 0 }}
-        >
-          <span style={{ display: 'block', width: 22, height: 2, background: '#f5f5f0', borderRadius: 2, transition: 'all 0.3s', transform: menuOpen ? 'translateY(7px) rotate(45deg)' : 'none' }} />
-          <span style={{ display: 'block', width: 22, height: 2, background: '#f5f5f0', borderRadius: 2, transition: 'all 0.3s', opacity: menuOpen ? 0 : 1 }} />
-          <span style={{ display: 'block', width: 22, height: 2, background: '#f5f5f0', borderRadius: 2, transition: 'all 0.3s', transform: menuOpen ? 'translateY(-7px) rotate(-45deg)' : 'none' }} />
-        </button>
+        {/* Mobile: cart + hamburger */}
+        <div className="woof-burger" style={{ alignItems: 'center', gap: '12px' }}>
+          {/* Mobile cart button */}
+          <button onClick={openCart} style={{
+            position: 'relative', background: 'none', border: 'none',
+            cursor: 'pointer', fontSize: '22px', padding: '4px',
+            zIndex: 101,
+          }}>
+            🛒
+            {count > 0 && (
+              <span style={{
+                position: 'absolute', top: -4, right: -4,
+                background: '#4DFFD2', color: '#0d0d0d',
+                borderRadius: '50%', width: 18, height: 18,
+                fontSize: '10px', fontWeight: 700,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                {count}
+              </span>
+            )}
+          </button>
+
+          {/* Hamburger */}
+          <button onClick={() => setMenuOpen(o => !o)}
+            style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '5px', width: 40, height: 40, background: 'none', border: 'none', cursor: 'pointer', zIndex: 101, padding: 0 }}
+          >
+            <span style={{ display: 'block', width: 22, height: 2, background: '#f5f5f0', borderRadius: 2, transition: 'all 0.3s', transform: menuOpen ? 'translateY(7px) rotate(45deg)' : 'none' }} />
+            <span style={{ display: 'block', width: 22, height: 2, background: '#f5f5f0', borderRadius: 2, transition: 'all 0.3s', opacity: menuOpen ? 0 : 1 }} />
+            <span style={{ display: 'block', width: 22, height: 2, background: '#f5f5f0', borderRadius: 2, transition: 'all 0.3s', transform: menuOpen ? 'translateY(-7px) rotate(-45deg)' : 'none' }} />
+          </button>
+        </div>
       </header>
 
       {/* Mobile Drawer */}
@@ -101,13 +143,13 @@ export default function Header() {
             onMouseLeave={e => (e.currentTarget.style.color = '#f5f5f0')}
           >{item}</a>
         ))}
-        <a href="#contacto" onClick={() => setMenuOpen(false)} style={{
+        <button onClick={() => { openCart(); setMenuOpen(false) }} style={{
           marginTop: '2rem', background: '#4DFFD2', color: '#0d0d0d',
-          padding: '16px 40px', borderRadius: '4px',
-          fontFamily: 'Bebas Neue, sans-serif', fontSize: '20px', letterSpacing: '3px', textDecoration: 'none',
+          padding: '16px 40px', borderRadius: '4px', border: 'none',
+          fontFamily: 'Bebas Neue, sans-serif', fontSize: '20px', letterSpacing: '3px', cursor: 'pointer',
           opacity: menuOpen ? 1 : 0,
           transition: 'opacity 0.3s 0.28s',
-        }}>Pedir Ahora</a>
+        }}>🛒 Ver Carrito {count > 0 ? `(${count})` : ''}</button>
       </div>
     </>
   )

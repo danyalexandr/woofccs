@@ -87,3 +87,56 @@ woofccs/
     └── schema.sql        # SQL para crear tabla orders
 ```
 # woofccs
+
+# WoofCCS — Panel Admin
+
+## Estructura de archivos a copiar
+
+```
+app/
+  admin/
+    page.tsx          ← Login
+    layout.tsx        ← Sidebar + auth guard
+    orders/
+      page.tsx        ← Lista y gestión de pedidos
+    products/
+      page.tsx        ← CRUD de productos
+
+lib/
+  supabase.ts         ← Cliente Supabase + tipos
+
+supabase/
+  schema.sql          ← Ejecutar en Supabase SQL Editor
+```
+
+## Setup paso a paso
+
+### 1. Ejecutar el SQL
+Ve a **Supabase → SQL Editor** y ejecuta `supabase/schema.sql`.
+Esto crea las tablas `products` y `orders` con RLS, e inserta productos de ejemplo.
+
+### 2. Crear el usuario admin
+Ve a **Supabase → Authentication → Users → Add user → Create new user**.
+Ingresa el email y contraseña del admin.
+
+> No uses "Invite user" si quieres definir la contraseña tú mismo.
+
+### 3. Copiar lib/supabase.ts
+Reemplaza o crea `lib/supabase.ts` con el archivo incluido.
+Las variables de entorno ya deben estar en tu `.env.local`:
+```
+NEXT_PUBLIC_SUPABASE_URL=...
+NEXT_PUBLIC_SUPABASE_ANON_KEY=...
+```
+
+### 4. Rutas disponibles
+| Ruta | Descripción |
+|------|-------------|
+| `/admin` | Login |
+| `/admin/orders` | Lista de pedidos, cambio de estado |
+| `/admin/products` | Crear, editar, eliminar productos |
+
+## Próximo paso: catálogo dinámico
+Una vez tengas productos en Supabase, el siguiente paso es que
+`ProductGrid.tsx` los cargue desde la DB en lugar del archivo
+`lib/products.ts` hardcodeado. Avísame cuando estés listo para eso.

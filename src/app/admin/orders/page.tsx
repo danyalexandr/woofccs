@@ -12,6 +12,8 @@ const STATUS_CONFIG: Record<OrderStatus, { label: string; color: string; bg: str
 
 const STATUS_ORDER: OrderStatus[] = ['pending', 'confirmed', 'delivered', 'cancelled']
 
+export const dynamic = 'force-dynamic'
+
 export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>([])
   const [loading, setLoading] = useState(true)

@@ -1,17 +1,18 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Product } from '@/lib/supabase'  // ← ahora viene de supabase, no de lib/products
+import { Product } from '@/lib/supabase'
+import { useCart } from '@/lib/CartContext'
 
 interface Props {
   product: Product
   onClose: () => void
-  onAddToOrder: (item: { product: Product; qty: number }) => void
 }
 
-export default function ProductModal({ product, onClose, onAddToOrder }: Props) {
+export default function ProductModal({ product, onClose }: Props) {
   const [qty, setQty] = useState(1)
   const [added, setAdded] = useState(false)
+  const { addItem } = useCart()
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose()
@@ -21,11 +22,9 @@ export default function ProductModal({ product, onClose, onAddToOrder }: Props) 
   }, [onClose])
 
   const handleAdd = () => {
-    onAddToOrder({ product, qty })
+    addItem(product, qty)  // agrega al carrito y abre el drawer automáticamente
     setAdded(true)
-    setTimeout(() => {
-      document.getElementById('contacto')?.scrollIntoView({ behavior: 'smooth' })
-    }, 100)
+    setTimeout(onClose, 600)
   }
 
   return (
@@ -82,7 +81,6 @@ export default function ProductModal({ product, onClose, onAddToOrder }: Props) 
             {product.description}
           </p>
 
-          {/* Benefits */}
           {product.benefits && product.benefits.length > 0 && (
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '1rem' }}>
               {product.benefits.map(b => (
@@ -94,7 +92,6 @@ export default function ProductModal({ product, onClose, onAddToOrder }: Props) 
             </div>
           )}
 
-          {/* Ingredients */}
           {product.ingredients && (
             <div style={{
               background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)',
@@ -133,7 +130,7 @@ export default function ProductModal({ product, onClose, onAddToOrder }: Props) 
             borderRadius: '8px', fontFamily: 'Bebas Neue, sans-serif', fontSize: '14px', letterSpacing: '2px',
             cursor: product.in_stock ? 'pointer' : 'not-allowed', transition: 'all 0.3s',
           }}>
-            {!product.in_stock ? 'AGOTADO' : added ? '✓ IR AL PEDIDO' : `AGREGAR · $${(product.price_usd * qty).toFixed(2)}`}
+            {!product.in_stock ? 'AGOTADO' : added ? '✓ AGREGADO AL CARRITO' : `AGREGAR · $${(product.price_usd * qty).toFixed(2)}`}
           </button>
         </div>
       </div>
