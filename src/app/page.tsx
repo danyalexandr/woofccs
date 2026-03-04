@@ -6,17 +6,14 @@ import Hero from '@/components/Hero'
 import ProductGrid from '@/components/ProductGrid'
 import OrderForm from '@/components/OrderForm'
 import Footer from '@/components/Footer'
-import { Product } from '@/lib/products'
+import { Product } from '@/lib/supabase'  // ← tipo viene de supabase ahora
 
 export interface CartItem {
   product: Product
   qty: number
 }
 
-
-
 export default function Home() {
-
   const [pendingItem, setPendingItem] = useState<CartItem | null>(null)
 
   return (
