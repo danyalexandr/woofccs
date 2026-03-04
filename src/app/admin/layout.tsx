@@ -16,7 +16,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [checking, setChecking] = useState(true)
   const [adminEmail, setAdminEmail] = useState('')
 
+  const isLoginPage = pathname === '/admin'
+
   useEffect(() => {
+    // Si es la página de login, no verificar sesión — mostrar directo
+    if (isLoginPage) {
+      setChecking(false)
+      return
+    }
+
     supabase.auth.getSession().then(({ data }) => {
       if (!data.session) {
         router.replace('/admin')
@@ -25,20 +33,32 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         setChecking(false)
       }
     })
-  }, [router])
+  }, [pathname])
+
+  // Página de login: renderiza sin sidebar
+  if (isLoginPage) {
+    return <>{children}</>
+  }
+
+  // Páginas protegidas: mostrar loading mientras verifica
+  if (checking) {
+    return (
+      <div style={{
+        minHeight: '100vh', background: '#0a0a0a',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        fontFamily: 'Bebas Neue, sans-serif',
+      }}>
+        <div style={{ fontSize: '20px', letterSpacing: '4px', color: '#4DFFD2' }}>
+          VERIFICANDO SESIÓN...
+        </div>
+      </div>
+    )
+  }
 
   const handleLogout = async () => {
     await supabase.auth.signOut()
     router.push('/admin')
   }
-
-  if (checking) return (
-    <div style={{ minHeight: '100vh', background: '#0a0a0a', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: '24px', letterSpacing: '4px', color: '#4DFFD2' }}>
-        CARGANDO...
-      </div>
-    </div>
-  )
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: '#0a0a0a', fontFamily: 'DM Sans, sans-serif' }}>
@@ -52,7 +72,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         padding: '1.5rem 0',
         position: 'sticky', top: 0, height: '100vh',
       }}>
-        {/* Logo */}
         <div style={{ padding: '0 1.5rem 1.5rem', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
           <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
             <div style={{ width: 32, height: 32, borderRadius: '50%', background: '#4DFFD2', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -67,7 +86,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </div>
         </div>
 
-        {/* Nav */}
         <nav style={{ flex: 1, padding: '1rem 0.75rem' }}>
           {NAV.map(({ href, icon, label }) => {
             const active = pathname.startsWith(href)
@@ -92,7 +110,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           })}
         </nav>
 
-        {/* User + Logout */}
         <div style={{ padding: '1rem 1.5rem', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
           <div style={{ fontSize: '11px', color: '#444', marginBottom: '10px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
             {adminEmail}
@@ -111,7 +128,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </div>
       </aside>
 
-      {/* Main content */}
       <main style={{ flex: 1, overflowY: 'auto', padding: '2.5rem' }}>
         {children}
       </main>
