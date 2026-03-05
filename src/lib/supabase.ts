@@ -33,4 +33,5 @@ export interface Product {
   emoji: string
   color: string
   in_stock: boolean
+  image_url: string | null   // ← nuevo
 }

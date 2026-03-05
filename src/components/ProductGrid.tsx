@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Image from 'next/image'
 import { supabase, Product } from '@/lib/supabase'
 import ProductModal from './ProductModal'
 
@@ -56,11 +57,10 @@ export default function ProductGrid() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem' }}>
           {[1,2,3,4,5,6].map(i => (
             <div key={i} style={{ background: '#141414', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.06)', overflow: 'hidden' }}>
-              <div style={{ height: '200px', background: 'rgba(255,255,255,0.03)', animation: 'pulse 1.5s ease-in-out infinite' }} />
+              <div style={{ height: '220px', background: 'rgba(255,255,255,0.03)', animation: 'pulse 1.5s ease-in-out infinite' }} />
               <div style={{ padding: '1.5rem' }}>
                 <div style={{ height: 12, width: '40%', background: 'rgba(255,255,255,0.04)', borderRadius: 4, marginBottom: 10 }} />
-                <div style={{ height: 20, width: '70%', background: 'rgba(255,255,255,0.06)', borderRadius: 4, marginBottom: 10 }} />
-                <div style={{ height: 12, width: '90%', background: 'rgba(255,255,255,0.03)', borderRadius: 4 }} />
+                <div style={{ height: 20, width: '70%', background: 'rgba(255,255,255,0.06)', borderRadius: 4 }} />
               </div>
             </div>
           ))}
@@ -94,6 +94,7 @@ export default function ProductGrid() {
 
 function ProductCard({ product, onClick }: { product: Product; onClick: () => void }) {
   const [hovered, setHovered] = useState(false)
+
   return (
     <div onClick={onClick} onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} style={{
       background: '#141414',
@@ -103,25 +104,63 @@ function ProductCard({ product, onClick }: { product: Product; onClick: () => vo
       transform: hovered ? 'translateY(-4px)' : 'none',
       boxShadow: hovered ? `0 20px 60px ${product.color}20` : 'none',
     }}>
+      {/* Image or emoji */}
       <div style={{
-        height: '200px',
-        background: `linear-gradient(135deg, ${product.color}15 0%, ${product.color}05 100%)`,
+        height: '220px', position: 'relative', overflow: 'hidden',
+        background: product.image_url ? '#1a1a1a' : `linear-gradient(135deg, ${product.color}15 0%, ${product.color}05 100%)`,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        fontSize: '80px', position: 'relative',
       }}>
-        <span style={{ filter: 'drop-shadow(0 8px 24px rgba(0,0,0,0.4))' }}>{product.emoji}</span>
-        {!product.in_stock && (
-          <div style={{ position: 'absolute', top: 12, right: 12, background: 'rgba(0,0,0,0.7)', padding: '4px 10px', borderRadius: '4px', fontSize: '11px', color: '#888', letterSpacing: '1px', textTransform: 'uppercase' }}>
-            Agotado
-          </div>
+        {product.image_url ? (
+          <img
+            src={product.image_url}
+            alt={product.name}
+            style={{
+              width: '100%', height: '100%', objectFit: 'cover',
+              transition: 'transform 0.4s ease',
+              transform: hovered ? 'scale(1.05)' : 'scale(1)',
+            }}
+          />
+        ) : (
+          <span style={{ fontSize: '80px', filter: 'drop-shadow(0 8px 24px rgba(0,0,0,0.4))' }}>
+            {product.emoji}
+          </span>
         )}
-        <div style={{ position: 'absolute', top: 12, left: 12, background: `${product.color}20`, border: `1px solid ${product.color}40`, padding: '4px 10px', borderRadius: '4px', fontSize: '11px', color: product.color, letterSpacing: '1px', textTransform: 'uppercase', fontWeight: 600 }}>
+
+        {/* Overlay gradient on image for readability */}
+        {product.image_url && (
+          <div style={{
+            position: 'absolute', bottom: 0, left: 0, right: 0, height: '60px',
+            background: 'linear-gradient(transparent, rgba(20,20,20,0.8))',
+          }} />
+        )}
+
+        {!product.in_stock && (
+          <div style={{
+            position: 'absolute', top: 12, right: 12,
+            background: 'rgba(0,0,0,0.75)', padding: '4px 10px', borderRadius: '4px',
+            fontSize: '11px', color: '#888', letterSpacing: '1px', textTransform: 'uppercase',
+            backdropFilter: 'blur(4px)',
+          }}>Agotado</div>
+        )}
+        <div style={{
+          position: 'absolute', top: 12, left: 12,
+          background: product.image_url ? 'rgba(0,0,0,0.6)' : `${product.color}20`,
+          border: `1px solid ${product.image_url ? 'rgba(255,255,255,0.15)' : product.color + '40'}`,
+          padding: '4px 10px', borderRadius: '4px', backdropFilter: 'blur(4px)',
+          fontSize: '11px', color: product.image_url ? '#fff' : product.color,
+          letterSpacing: '1px', textTransform: 'uppercase', fontWeight: 600,
+        }}>
           {product.category}
         </div>
       </div>
+
       <div style={{ padding: '1.5rem' }}>
-        <div style={{ fontSize: '12px', color: '#555', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '4px' }}>{product.brand}</div>
-        <h3 style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: '24px', letterSpacing: '1px', color: '#f5f5f0', marginBottom: '8px' }}>{product.name}</h3>
+        <div style={{ fontSize: '12px', color: '#555', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '4px' }}>
+          {product.brand}
+        </div>
+        <h3 style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: '24px', letterSpacing: '1px', color: '#f5f5f0', marginBottom: '8px' }}>
+          {product.name}
+        </h3>
         <p style={{ fontSize: '13px', color: '#666', lineHeight: 1.6, marginBottom: '1.2rem' }}>
           {(product.description ?? '').slice(0, 80)}{(product.description ?? '').length > 80 ? '...' : ''}
         </p>
@@ -130,7 +169,12 @@ function ProductCard({ product, onClick }: { product: Product; onClick: () => vo
             <span style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: '28px', color: '#4DFFD2' }}>${product.price_usd}</span>
             <span style={{ fontSize: '12px', color: '#555', marginLeft: '4px' }}>/ {product.weight_kg}kg</span>
           </div>
-          <div style={{ width: 36, height: 36, borderRadius: '50%', background: hovered ? product.color : 'rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background 0.3s', fontSize: '18px' }}>→</div>
+          <div style={{
+            width: 36, height: 36, borderRadius: '50%',
+            background: hovered ? product.color : 'rgba(255,255,255,0.05)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            transition: 'background 0.3s', fontSize: '18px',
+          }}>→</div>
         </div>
       </div>
     </div>

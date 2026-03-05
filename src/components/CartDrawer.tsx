@@ -3,20 +3,17 @@
 import { useEffect } from 'react'
 import { useCart } from '@/lib/CartContext'
 
-// ← Pon aquí tu número de WhatsApp con código de país, sin + ni espacios
 const WHATSAPP_NUMBER = '541126322496'
 
 export default function CartDrawer() {
-  const { items, total, count, isOpen, closeCart } = useCart()
+  const { items, total, count, isOpen, closeCart, clearCart } = useCart()
 
-  // Cierra con ESC
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && closeCart()
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [closeCart])
 
-  // Bloquea scroll del body cuando está abierto
   useEffect(() => {
     document.body.style.overflow = isOpen ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
@@ -24,42 +21,29 @@ export default function CartDrawer() {
 
   const handleWhatsApp = () => {
     if (items.length === 0) return
-
     const lines = items.map(i =>
       `• ${i.product.name} (${i.product.weight_kg}kg) x${i.qty} — $${(i.product.price_usd * i.qty).toFixed(2)}`
     ).join('\n')
-
     const message = `¡Hola! Quiero hacer un pedido:\n\n${lines}\n\n*Total: $${total.toFixed(2)} USD*`
-    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`
-    window.open(url, '_blank')
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank')
   }
 
   return (
     <>
-      <style>{`
-        @keyframes drawerIn  { from { transform: translateX(100%) } to { transform: translateX(0) } }
-        @keyframes drawerOut { from { transform: translateX(0) } to { transform: translateX(100%) } }
-        @keyframes fadeIn    { from { opacity: 0 } to { opacity: 1 } }
-      `}</style>
+      <style>{`@keyframes fadeIn { from{opacity:0} to{opacity:1} }`}</style>
 
-      {/* Overlay */}
       {isOpen && (
-        <div
-          onClick={closeCart}
-          style={{
-            position: 'fixed', inset: 0, zIndex: 300,
-            background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)',
-            animation: 'fadeIn 0.2s ease',
-          }}
-        />
+        <div onClick={closeCart} style={{
+          position: 'fixed', inset: 0, zIndex: 300,
+          background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)',
+          animation: 'fadeIn 0.2s ease',
+        }} />
       )}
 
-      {/* Drawer */}
       <div style={{
         position: 'fixed', top: 0, right: 0, bottom: 0, zIndex: 301,
         width: '100%', maxWidth: '400px',
-        background: '#0f0f0f',
-        borderLeft: '1px solid rgba(255,255,255,0.07)',
+        background: '#0f0f0f', borderLeft: '1px solid rgba(255,255,255,0.07)',
         display: 'flex', flexDirection: 'column',
         transform: isOpen ? 'translateX(0)' : 'translateX(100%)',
         transition: 'transform 0.35s cubic-bezier(0.4,0,0.2,1)',
@@ -77,28 +61,48 @@ export default function CartDrawer() {
               CARRITO
             </span>
             {count > 0 && (
-              <span style={{
-                background: '#4DFFD2', color: '#0d0d0d',
-                borderRadius: '100px', padding: '2px 9px',
-                fontSize: '12px', fontWeight: 700,
-              }}>
+              <span style={{ background: '#4DFFD2', color: '#0d0d0d', borderRadius: '100px', padding: '2px 9px', fontSize: '12px', fontWeight: 700 }}>
                 {count}
               </span>
             )}
           </div>
-          <button onClick={closeCart} style={{
-            background: 'rgba(255,255,255,0.05)',
-            border: '1px solid rgba(255,255,255,0.08)',
-            color: '#888', width: 32, height: 32,
-            borderRadius: '50%', cursor: 'pointer', fontSize: '16px',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-          }}>✕</button>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            {/* Vaciar carrito */}
+            {items.length > 0 && (
+              <button
+                onClick={clearCart}
+                title="Vaciar carrito"
+                style={{
+                  background: 'transparent',
+                  border: '1px solid rgba(231,76,60,0.2)',
+                  color: '#E74C3C', borderRadius: '6px',
+                  padding: '5px 10px', fontSize: '12px',
+                  cursor: 'pointer', letterSpacing: '0.5px',
+                  fontFamily: 'DM Sans, sans-serif',
+                  transition: 'all 0.2s', opacity: 0.7,
+                }}
+                onMouseEnter={e => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.borderColor = 'rgba(231,76,60,0.5)' }}
+                onMouseLeave={e => { e.currentTarget.style.opacity = '0.7'; e.currentTarget.style.borderColor = 'rgba(231,76,60,0.2)' }}
+              >
+                Vaciar
+              </button>
+            )}
+
+            {/* Cerrar */}
+            <button onClick={closeCart} style={{
+              background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)',
+              color: '#888', width: 32, height: 32, borderRadius: '50%',
+              cursor: 'pointer', fontSize: '16px',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>✕</button>
+          </div>
         </div>
 
         {/* Items */}
         <div style={{ flex: 1, overflowY: 'auto', padding: '1rem 1.5rem' }}>
           {items.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '4rem 1rem', color: '#333' }}>
+            <div style={{ textAlign: 'center', padding: '4rem 1rem' }}>
               <div style={{ fontSize: '48px', marginBottom: '1rem' }}>🛒</div>
               <div style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: '20px', letterSpacing: '3px', color: '#2a2a2a' }}>
                 CARRITO VACÍO
@@ -112,22 +116,17 @@ export default function CartDrawer() {
               {items.map(({ product, qty }) => (
                 <div key={product.id} style={{
                   display: 'flex', alignItems: 'center', gap: '12px',
-                  background: '#141414',
-                  border: '1px solid rgba(255,255,255,0.06)',
+                  background: '#141414', border: '1px solid rgba(255,255,255,0.06)',
                   borderRadius: '10px', padding: '12px',
                 }}>
-                  {/* Emoji */}
                   <div style={{
                     width: 48, height: 48, flexShrink: 0,
-                    background: `${product.color}15`,
-                    borderRadius: '8px',
+                    background: `${product.color}15`, borderRadius: '8px',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     fontSize: '26px',
                   }}>
                     {product.emoji}
                   </div>
-
-                  {/* Info */}
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ fontSize: '13px', fontWeight: 600, color: '#f5f5f0', marginBottom: '2px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                       {product.name}
@@ -136,12 +135,7 @@ export default function CartDrawer() {
                       {product.weight_kg}kg · x{qty}
                     </div>
                   </div>
-
-                  {/* Price */}
-                  <div style={{
-                    fontFamily: 'Bebas Neue, sans-serif', fontSize: '18px',
-                    color: '#4DFFD2', flexShrink: 0,
-                  }}>
+                  <div style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: '18px', color: '#4DFFD2', flexShrink: 0 }}>
                     ${(product.price_usd * qty).toFixed(2)}
                   </div>
                 </div>
@@ -152,29 +146,19 @@ export default function CartDrawer() {
 
         {/* Footer */}
         {items.length > 0 && (
-          <div style={{
-            padding: '1.25rem 1.5rem',
-            borderTop: '1px solid rgba(255,255,255,0.06)',
-          }}>
-            {/* Total */}
-            <div style={{
-              display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-              marginBottom: '1rem',
-            }}>
+          <div style={{ padding: '1.25rem 1.5rem', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
               <span style={{ fontSize: '13px', color: '#666', letterSpacing: '1px', textTransform: 'uppercase' }}>Total</span>
               <span style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: '32px', color: '#f5f5f0' }}>
                 ${total.toFixed(2)} <span style={{ fontSize: '14px', color: '#555' }}>USD</span>
               </span>
             </div>
 
-            {/* WhatsApp CTA */}
             <button onClick={handleWhatsApp} style={{
-              width: '100%', padding: '16px',
-              background: '#25D366',  // verde WhatsApp
-              color: '#fff',
+              width: '100%', padding: '16px', background: '#25D366', color: '#fff',
               border: 'none', borderRadius: '10px',
               fontFamily: 'Bebas Neue, sans-serif', fontSize: '18px', letterSpacing: '2px',
-              cursor: 'pointer', transition: 'all 0.2s',
+              cursor: 'pointer', transition: 'background 0.2s',
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
             }}
               onMouseEnter={e => (e.currentTarget.style.background = '#1ebe5d')}

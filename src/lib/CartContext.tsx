@@ -11,6 +11,7 @@ export interface CartItem {
 interface CartContextType {
   items: CartItem[]
   addItem: (product: Product, qty: number) => void
+  clearCart: () => void
   total: number
   count: number
   isOpen: boolean
@@ -32,14 +33,16 @@ export function CartProvider({ children }: { children: ReactNode }) {
       }
       return [...prev, { product, qty }]
     })
-    setIsOpen(true) // abre el drawer al agregar
+    setIsOpen(true)
   }, [])
+
+  const clearCart = useCallback(() => setItems([]), [])
 
   const total = items.reduce((sum, i) => sum + i.product.price_usd * i.qty, 0)
   const count = items.reduce((sum, i) => sum + i.qty, 0)
 
   return (
-    <CartContext.Provider value={{ items, addItem, total, count, isOpen, openCart: () => setIsOpen(true), closeCart: () => setIsOpen(false) }}>
+    <CartContext.Provider value={{ items, addItem, clearCart, total, count, isOpen, openCart: () => setIsOpen(true), closeCart: () => setIsOpen(false) }}>
       {children}
     </CartContext.Provider>
   )

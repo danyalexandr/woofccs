@@ -22,7 +22,7 @@ export default function ProductModal({ product, onClose }: Props) {
   }, [onClose])
 
   const handleAdd = () => {
-    addItem(product, qty)  // agrega al carrito y abre el drawer automáticamente
+    addItem(product, qty)
     setAdded(true)
     setTimeout(onClose, 600)
   }
@@ -39,7 +39,7 @@ export default function ProductModal({ product, onClose }: Props) {
         .modal-inner { display: grid; grid-template-columns: 1fr 1fr; max-width: 760px; width: 100%; }
         @media (max-width: 640px) {
           .modal-inner { grid-template-columns: 1fr !important; max-height: 90vh; overflow-y: auto; }
-          .modal-image-pane { min-height: 180px !important; font-size: 80px !important; padding: 2rem !important; }
+          .modal-image-pane { min-height: 220px !important; }
         }
       `}</style>
 
@@ -50,25 +50,48 @@ export default function ProductModal({ product, onClose }: Props) {
       }}>
         {/* Left: Image */}
         <div className="modal-image-pane" style={{
-          background: `linear-gradient(135deg, ${product.color}20 0%, ${product.color}05 100%)`,
+          position: 'relative', minHeight: '300px', overflow: 'hidden',
+          background: product.image_url ? '#1a1a1a' : `linear-gradient(135deg, ${product.color}20 0%, ${product.color}05 100%)`,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontSize: '100px', padding: '3rem', position: 'relative', minHeight: '260px',
         }}>
-          <span style={{ filter: 'drop-shadow(0 16px 40px rgba(0,0,0,0.5))' }}>{product.emoji}</span>
+          {product.image_url ? (
+            <img
+              src={product.image_url}
+              alt={product.name}
+              style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', inset: 0 }}
+            />
+          ) : (
+            <span style={{ fontSize: '100px', filter: 'drop-shadow(0 16px 40px rgba(0,0,0,0.5))', position: 'relative', zIndex: 1 }}>
+              {product.emoji}
+            </span>
+          )}
+
+          {/* Brand badge */}
           <div style={{
-            position: 'absolute', bottom: 16, left: 16,
-            background: `${product.color}20`, border: `1px solid ${product.color}50`,
-            padding: '6px 14px', borderRadius: '6px',
-            fontSize: '10px', color: product.color, letterSpacing: '1px', textTransform: 'uppercase', fontWeight: 700,
+            position: 'absolute', bottom: 16, left: 16, zIndex: 2,
+            background: product.image_url ? 'rgba(0,0,0,0.7)' : `${product.color}20`,
+            border: `1px solid ${product.image_url ? 'rgba(255,255,255,0.2)' : product.color + '50'}`,
+            padding: '6px 14px', borderRadius: '6px', backdropFilter: 'blur(6px)',
+            fontSize: '10px', color: product.image_url ? '#fff' : product.color,
+            letterSpacing: '1px', textTransform: 'uppercase', fontWeight: 700,
           }}>{product.brand}</div>
+
+          {/* Gradient overlay for readability */}
+          {product.image_url && (
+            <div style={{
+              position: 'absolute', inset: 0,
+              background: 'linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 50%)',
+            }} />
+          )}
         </div>
 
         {/* Right: Details */}
-        <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column' }}>
+        <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
           <button onClick={onClose} style={{
             alignSelf: 'flex-end', background: 'rgba(255,255,255,0.05)',
             border: '1px solid rgba(255,255,255,0.08)', color: '#888',
             width: 30, height: 30, borderRadius: '50%', cursor: 'pointer', fontSize: '16px', marginBottom: '0.75rem',
+            flexShrink: 0,
           }}>✕</button>
 
           <div style={{ fontSize: '11px', color: '#555', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '4px' }}>
@@ -102,7 +125,6 @@ export default function ProductModal({ product, onClose }: Props) {
             </div>
           )}
 
-          {/* Price */}
           <div style={{ marginBottom: '1rem' }}>
             <span style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: '30px', color: '#4DFFD2' }}>
               ${(product.price_usd * qty).toFixed(2)}
@@ -110,7 +132,6 @@ export default function ProductModal({ product, onClose }: Props) {
             <span style={{ fontSize: '12px', color: '#555', marginLeft: '4px' }}>USD</span>
           </div>
 
-          {/* Quantity */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', background: '#1e1e1e', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.08)' }}>
               <button onClick={() => setQty(q => Math.max(1, q - 1))}
