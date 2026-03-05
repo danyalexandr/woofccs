@@ -83,7 +83,7 @@ export default function OrderForm({ pendingItem, onClear }: Props) {
             <span style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: '12px', letterSpacing: '4px', color: '#4DFFD2', textTransform: 'uppercase' }}>
               — Hacer Pedido
             </span>
-            <h2 style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 'clamp(42px, 6vw, 72px)', lineHeight: 1, marginTop: '8px', color: '#f5f5f0' }}>
+            <h2 style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 'clamp(38px, 6vw, 60px)', lineHeight: 1, marginTop: '8px', color: '#f5f5f0' }}>
               SOLICITA TU<br />PEDIDO
             </h2>
             <p style={{ fontSize: '15px', color: '#666', marginTop: '1rem', lineHeight: 1.6 }}>
@@ -134,7 +134,7 @@ export default function OrderForm({ pendingItem, onClear }: Props) {
                 background: status === 'loading' ? '#1e1e1e' : '#4DFFD2',
                 color: status === 'loading' ? '#555' : '#0d0d0d',
                 border: 'none', borderRadius: '8px',
-                fontFamily: 'Bebas Neue, sans-serif', fontSize: '20px', letterSpacing: '3px',
+                fontFamily: 'Bebas Neue, sans-serif', fontSize: '16px', letterSpacing: '3px',
                 cursor: status === 'loading' ? 'not-allowed' : 'pointer', transition: 'all 0.3s',
               }}>
                 {status === 'loading' ? 'ENVIANDO...' : 'ENVIAR SOLICITUD →'}
@@ -142,7 +142,7 @@ export default function OrderForm({ pendingItem, onClear }: Props) {
 
               <p style={{ fontSize: '14px', color: '#444', textAlign: 'center', marginTop: '1rem' }}>
                 También puedes escribirnos por{' '}
-                <a href="https://wa.me/584142787453" style={{ color: '#4DFFD2', textDecoration: 'none' }}>WhatsApp</a>
+                <a href="https://wa.me/541126322496" style={{ color: '#4DFFD2', textDecoration: 'none' }}>WhatsApp</a>
               </p>
             </div>
           )}

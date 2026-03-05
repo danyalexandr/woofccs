@@ -35,7 +35,7 @@ export default function ProductGrid() {
         <span style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: '12px', letterSpacing: '4px', color: '#4DFFD2', textTransform: 'uppercase' }}>
           — Catálogo
         </span>
-        <h2 style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 'clamp(42px, 6vw, 72px)', lineHeight: 1, marginTop: '8px', color: '#f5f5f0' }}>
+        <h2 style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 'clamp(38px, 6vw, 60px)', lineHeight: 1, marginTop: '8px', color: '#f5f5f0' }}>
           NUESTROS<br />PRODUCTOS
         </h2>
       </div>
@@ -47,7 +47,7 @@ export default function ProductGrid() {
             border: active === cat ? '1px solid #4DFFD2' : '1px solid rgba(255,255,255,0.1)',
             background: active === cat ? 'rgba(77,255,210,0.1)' : 'transparent',
             color: active === cat ? '#4DFFD2' : '#888',
-            fontSize: '13px', fontFamily: 'DM Sans, sans-serif', fontWeight: 500,
+            fontSize: '12px', fontFamily: 'DM Sans, sans-serif', fontWeight: 500,
             cursor: 'pointer', letterSpacing: '0.5px', transition: 'all 0.2s',
           }}>{cat}</button>
         ))}

@@ -90,21 +90,21 @@ export default function ProductModal({ product, onClose }: Props) {
           <button onClick={onClose} style={{
             alignSelf: 'flex-end', background: 'rgba(255,255,255,0.05)',
             border: '1px solid rgba(255,255,255,0.08)', color: '#888',
-            width: 30, height: 30, borderRadius: '50%', cursor: 'pointer', fontSize: '16px', marginBottom: '0.75rem',
+            width: 30, height: 30, borderRadius: '50%', cursor: 'pointer', fontSize: '14px', marginBottom: '0.75rem',
             flexShrink: 0,
           }}>✕</button>
 
           <div style={{ fontSize: '11px', color: '#555', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '4px' }}>
             {product.category} · {product.weight_kg}kg
           </div>
-          <h2 style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: '30px', letterSpacing: '1px', color: '#f5f5f0', marginBottom: '0.75rem' }}>
+          <h2 style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: '26px', letterSpacing: '1px', color: '#f5f5f0', marginBottom: '0.75rem' }}>
             {product.name}
           </h2>
           <p style={{ fontSize: '13px', color: '#777', lineHeight: 1.7, marginBottom: '1rem' }}>
             {product.description}
           </p>
 
-          {product.benefits && product.benefits.length > 0 && (
+          {/* {product.benefits && product.benefits.length > 0 && (
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '1rem' }}>
               {product.benefits.map(b => (
                 <span key={b} style={{
@@ -113,7 +113,7 @@ export default function ProductModal({ product, onClose }: Props) {
                 }}>✓ {b}</span>
               ))}
             </div>
-          )}
+          )} */}
 
           {product.ingredients && (
             <div style={{
@@ -126,21 +126,21 @@ export default function ProductModal({ product, onClose }: Props) {
           )}
 
           <div style={{ marginBottom: '1rem' }}>
-            <span style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: '30px', color: '#4DFFD2' }}>
+            <span style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: '26px', color: '#4DFFD2' }}>
               ${(product.price_usd * qty).toFixed(2)}
             </span>
-            <span style={{ fontSize: '12px', color: '#555', marginLeft: '4px' }}>USD</span>
+            <span style={{ fontSize: '10px', color: '#555', marginLeft: '4px' }}>USD</span>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', background: '#1e1e1e', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.08)' }}>
               <button onClick={() => setQty(q => Math.max(1, q - 1))}
-                style={{ width: 40, height: 40, background: 'none', border: 'none', color: '#888', fontSize: '20px', cursor: 'pointer' }}>−</button>
-              <span style={{ width: 40, textAlign: 'center', fontFamily: 'Bebas Neue, sans-serif', fontSize: '20px', color: '#f5f5f0' }}>{qty}</span>
+                style={{ width: 40, height: 40, background: 'none', border: 'none', color: '#888', fontSize: '18px', cursor: 'pointer' }}>−</button>
+              <span style={{ width: 40, textAlign: 'center', fontFamily: 'Bebas Neue, sans-serif', fontSize: '18px', color: '#f5f5f0' }}>{qty}</span>
               <button onClick={() => setQty(q => q + 1)}
-                style={{ width: 40, height: 40, background: 'none', border: 'none', color: '#888', fontSize: '20px', cursor: 'pointer' }}>+</button>
+                style={{ width: 40, height: 40, background: 'none', border: 'none', color: '#888', fontSize: '18px', cursor: 'pointer' }}>+</button>
             </div>
-            <span style={{ fontSize: '13px', color: '#444' }}>unidades</span>
+            <span style={{ fontSize: '10px', color: '#444' }}>unidades</span>
           </div>
 
           <button onClick={handleAdd} disabled={!product.in_stock} style={{
@@ -148,7 +148,7 @@ export default function ProductModal({ product, onClose }: Props) {
             background: added ? '#1e1e1e' : (product.in_stock ? '#4DFFD2' : '#2a2a2a'),
             color: added ? '#4DFFD2' : (product.in_stock ? '#0d0d0d' : '#555'),
             border: added ? '1px solid #4DFFD2' : 'none',
-            borderRadius: '8px', fontFamily: 'Bebas Neue, sans-serif', fontSize: '14px', letterSpacing: '2px',
+            borderRadius: '8px', fontFamily: 'Bebas Neue, sans-serif', fontSize: '12px', letterSpacing: '2px',
             cursor: product.in_stock ? 'pointer' : 'not-allowed', transition: 'all 0.3s',
           }}>
             {!product.in_stock ? 'AGOTADO' : added ? '✓ AGREGADO AL CARRITO' : `AGREGAR · $${(product.price_usd * qty).toFixed(2)}`}

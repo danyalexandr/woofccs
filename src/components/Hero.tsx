@@ -46,14 +46,14 @@ export default function Hero() {
         }}>
           <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#4DFFD2', display: 'inline-block' }} />
           <span style={{ fontSize: '12px', letterSpacing: '2px', color: '#4DFFD2', textTransform: 'uppercase', fontWeight: 500 }}>
-            Caracas · Nutrición Natural
+            Comida casera · Nutrición Natural
           </span>
         </div>
 
         {/* Headline */}
         <h1 style={{
           fontFamily: 'Bebas Neue, sans-serif',
-          fontSize: 'clamp(50px, 10vw, 120px)',
+          fontSize: 'clamp(40px, 10vw, 100px)',
           lineHeight: 0.9,
           letterSpacing: '-1px',
           marginBottom: '1.5rem',
@@ -71,7 +71,7 @@ export default function Hero() {
           fontWeight: 300,
         }}>
           Alimentos naturales, balanceados y deliciosos para que tu perro viva su mejor vida.
-          Delivery en Caracas.
+          Delivery a consultar zonas.
         </p>
 
         <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>

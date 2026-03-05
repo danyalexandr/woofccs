@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useCart } from '@/lib/CartContext'
+import Image from 'next/image'
 
 const NAV_LINKS = ['Productos', 'Contacto']
 
@@ -50,7 +51,7 @@ export default function Header() {
         {/* Logo */}
         <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none', zIndex: 101 }}>
           <div style={{ width: 38, height: 38, borderRadius: '50%', background: '#4DFFD2', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <span style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: '20px', color: '#0d0d0d' }}>W</span>
+            <Image src="/woofccs_logo.png" alt="WoofCCS Logo" width={40} height={40} style={{ display: 'block' }} />
           </div>
           <span style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: '22px', letterSpacing: '4px', color: '#f5f5f0' }}>
             WOOF<span style={{ color: '#4DFFD2' }}>CCS</span>
@@ -95,7 +96,7 @@ export default function Header() {
           {/* Mobile cart button */}
           <button onClick={openCart} style={{
             position: 'relative', background: 'none', border: 'none',
-            cursor: 'pointer', fontSize: '22px', padding: '4px',
+            cursor: 'pointer', fontSize: '18px', padding: '4px',
             zIndex: 101,
           }}>
             🛒
